@@ -1,0 +1,37 @@
+{
+  "name": "memefeed-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:tailwind": "tailwindcss -i styles/globals.css -o dist/globals.css",
+    "build:postcss": "postcss dist/globals.css -o dist/globals.min.css",
+    "build:css": "npm run build:tailwind && npm run build:postcss",
+    "dev": "next dev",
+    "build": "npm run build:css && next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "18.11.10",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "@vercel/analytics": "^1.0.2",
+    "eslint": "8.28.0",
+    "eslint-config-next": "^13.4.19",
+    "next": "13.0.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-tooltip": "^5.21.3",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "autoprefixer": "^10.4.13",
+    "dotenv": "^16.3.1",
+    "eslint-config-prettier": "^9.0.0",
+    "postcss": "^8.4.19",
+    "postcss-cli": "^10.1.0",
+    "prettier": "^3.0.2",
+    "tailwindcss": "^3.2.4"
+  }
+}
