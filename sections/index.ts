@@ -1,3 +1,3 @@
-import View from './View'
+import Feed from './Feed'
 
-export { View }
+export { Feed }

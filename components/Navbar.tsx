@@ -1,22 +1,37 @@
 import Link from 'next/link'
-
 import styles from '../styles'
 
-const Navbar = () => (
-  <div className={`${styles.xPaddings} py-8 relative z-10`}>
-    <div className={`${styles.innerWidth} mx-auto flex justify-between gap-4`}>
-      <div className="flex justify-center items-center gap-4">
-        <Link href="/" className="w-[54px] sm:w-[66px] md:w-[81px]">
-          <img src="/logo.svg" alt="Memefeed Logo" />
+import { useRoom } from 'clients/hooks'
+import type { Room } from 'types'
+
+const Navbar = () => {
+  const { room } = useRoom() ?? ({} as { room: Room })
+
+  return (
+    <div className={`${styles.xPaddings} py-8 relative z-10`}>
+      <div className={`${styles.innerWidth} mx-auto flex justify-between items-center relative`}>
+        <Link href="/" className="flex items-center gap-2 md:gap-4">
+          {/* Logo */}
+          <div className="w-[48px] sm:w-[54px] md:w-[66px]">
+            <img src="/logos/logo.svg" alt="Memefeed Logo" />
+          </div>
+
+          {/* Title */}
+          <div className={`${styles.titleText}`}>Memefeed</div>
         </Link>
-      </div>
-      <div className="flex items-center gap-4 md:gap-8">
-        <Link href="/post" className={`${styles.blackLink}`}>
-          Post
-        </Link>
+
+        {/* Navbar Links */}
+        {room && (
+          <div className="room-details flex items-center gap-2 md:gap-4">
+            <div className={`${styles.titleTextSubheading}`}>{room.name}</div>
+            <div className="w-[48px] sm:w-[54px] md:w-[66px]">
+              <img src={room.logo_url} alt="Room Logo" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default Navbar
