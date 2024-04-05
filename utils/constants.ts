@@ -2,7 +2,7 @@ export const socials = [
   {
     name: 'X',
     url: 'logos/x-logo.svg',
-    linkUrl: 'https://x.com/memefeed',
+    linkUrl: 'https://x.com/MemefeedOrg',
   },
   {
     name: 'Github',

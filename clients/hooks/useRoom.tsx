@@ -1,17 +1,17 @@
 import { createContext, useState, useEffect, useContext } from 'react'
 
 import { getRoom } from '../rooms'
-import type { Room } from 'types'
+import type { Room } from 'models'
 
 const sampleRoom: Room = {
   id: 1,
   name: 'X',
-  logo_url: '/x.webp',
+  logoUrl: '/x.webp',
   description: 'A room for the curious minds',
-  creator_address: '0x1234567890',
+  creatorAddress: '0x1234567890',
   type: 'public',
-  created_at: '2021-09-01T00:00:00Z',
-  updated_at: '2021-09-01T00:00:00Z',
+  createdAt: '2021-09-01T00:00:00Z',
+  updatedAt: '2021-09-01T00:00:00Z',
 }
 
 type RoomContextValue = {

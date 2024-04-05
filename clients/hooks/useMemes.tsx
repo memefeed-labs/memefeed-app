@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { getPopularMemes } from '../memes'
-import type { Meme, Room } from 'types'
+import type { Meme, Room } from 'models'
 
 type UseMemesProps = {
   selectedTab: string

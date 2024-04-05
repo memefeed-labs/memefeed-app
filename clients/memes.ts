@@ -1,4 +1,4 @@
-import type { Room } from 'types'
+import type { Room } from 'models'
 
 const BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3001'
 

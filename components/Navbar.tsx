@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from '../styles'
 
 import { useRoom } from 'clients/hooks'
-import type { Room } from 'types'
+import type { Room } from 'models'
 
 const Navbar = () => {
   const { room } = useRoom() ?? ({} as { room: Room })
@@ -25,7 +25,7 @@ const Navbar = () => {
           <div className="room-details flex items-center gap-2 md:gap-4">
             <div className={`${styles.titleTextSubheading}`}>{room.name}</div>
             <div className="w-[48px] sm:w-[54px] md:w-[66px]">
-              <img src={room.logo_url} alt="Room Logo" />
+              <img src={room.logoUrl} alt="Room Logo" />
             </div>
           </div>
         )}
