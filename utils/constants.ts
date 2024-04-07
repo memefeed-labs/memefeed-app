@@ -15,3 +15,11 @@ export const socials = [
     linkUrl: 'https://t.me/memefeed',
   },
 ]
+
+export const tabs = [
+  { label: 'Live', value: 'Live' },
+  { label: 'Hour', value: 'Hour' },
+  { label: 'Today', value: 'Today' },
+  { label: 'Week', value: 'Week' },
+  { label: 'Month', value: 'Month' },
+];

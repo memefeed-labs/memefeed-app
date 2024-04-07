@@ -1,6 +1,6 @@
 import type { Room } from 'models'
 
-const BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3001'
+const BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3100'
 
 type GetMemesProps = {
   room: Room
@@ -11,11 +11,8 @@ type GetMemesProps = {
 
 const getPopularMemes = async ({ room, startDate, endDate, limit = 20 }: GetMemesProps) => {
   const response = await fetch(
-    `${BASE_URL}/v1/memes/popular?room=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}`
+    `${BASE_URL}/v1/memes/popular?roomId=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}`
   )
-
-  console.debug('getPopularMemes/response', response)
-
   if (!response.ok) {
     throw new Error('Failed to get popular memes')
   }

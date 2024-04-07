@@ -1,17 +1,10 @@
-import styles from '../styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+import styles from '../styles'
+import { tabs } from '../utils/constants'
 import { MemeCard, FeedToolbar } from '../components'
 import { useMemes, useRoom } from '../clients/hooks'
-
-// sample meme cards
-const sampleMemes = [
-  { imageUrl: '/memes/success_kid.jpeg', username: 'gaurang', likes: 10, timeAgo: '1 hour ago' },
-  { imageUrl: '/memes/success_kid.jpeg', username: 'avni', likes: 20, timeAgo: '2 hours ago' },
-  { imageUrl: '/memes/success_kid.jpeg', username: 'garfield', likes: 30, timeAgo: '3 hours ago' },
-  { imageUrl: '/memes/success_kid.jpeg', username: 'hammie', likes: 40, timeAgo: '4 hours ago' },
-]
 
 // Section used in feed page
 const Feed = () => {
@@ -30,7 +23,7 @@ const Feed = () => {
           <Link href="/post" className={`${styles.button} accent-button`}>
             Post
           </Link>
-          <FeedToolbar selectedTab={selectedTab} handleTabClick={handleTabClick} />
+          <FeedToolbar tabs={tabs} selectedTab={selectedTab} handleTabClick={handleTabClick} />
         </div>
 
         {loading && <div>Loading...</div>}

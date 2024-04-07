@@ -1,17 +1,11 @@
 import styles from '../styles'
 
-const tabs = [
-  { label: 'Live', value: 'Live' },
-  { label: 'Hour', value: 'Hour' },
-  { label: 'Today', value: 'Today' },
-  { label: 'Week', value: 'Week' },
-  { label: 'Month', value: 'Month' },
-]
-
 const FeedToolbar = ({
+  tabs,
   selectedTab,
   handleTabClick,
 }: {
+  tabs: { label: string; value: string }[]
   selectedTab: string
   handleTabClick: (tab: string) => void
 }) => {
