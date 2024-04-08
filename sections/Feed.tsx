@@ -1,16 +1,53 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 import styles from '../styles'
 import { tabs } from '../utils/constants'
+import type { Meme } from 'models'
 import { MemeCard, FeedToolbar } from '../components'
 import { useMemes, useRoom } from '../clients/hooks'
+import socket from '../clients/socketIO'
 
 // Section used in feed page
 const Feed = () => {
   const [selectedTab, setSelectedTab] = useState('Today')
   const { room } = useRoom() ?? {}
-  const { memes, loading, error } = useMemes({ selectedTab, room })
+  const [memes, setMemes] = useState<Meme[]>([])
+  const { memes: fetchedMemes, loading, error } = useMemes({ selectedTab, room })
+
+  const updateMemesQueue = (newMeme: Meme) => {
+    setMemes((prevMemes) => {
+      console.log('New meme:', newMeme)
+      // TODO: Implement a max limit for memes (this conflicts with fetching memes that are larger)
+      const maxMemes = 100
+      if (prevMemes.length >= maxMemes) {
+        prevMemes.pop()
+      }
+
+      return [newMeme, ...prevMemes]
+    })
+  }
+
+  // Update memes when new memes are fetched
+  useEffect(() => {
+    if (fetchedMemes) {
+      setMemes(fetchedMemes)
+    }
+  }, [fetchedMemes])
+
+  // Listen for new memes in real-time (live only)
+  useEffect(() => {
+    if (selectedTab !== 'Live') return
+
+    console.log('Listening for new memes...')
+    socket.on('new_meme', (meme) => {
+      updateMemesQueue(meme)
+    })
+
+    return () => {
+      socket.off('new_meme')
+    }
+  }, [selectedTab])
 
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab)

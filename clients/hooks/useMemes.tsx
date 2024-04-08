@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-
-import { getPopularMemes } from '../memes'
+import { getPopularMemes, getRecentMemes } from '../memes'
 import type { Meme, Room } from 'models'
 
 const getDatesFromTab = (tab: string) => {
@@ -41,46 +40,44 @@ const useMemes = ({
   loading: boolean
   error: string | null
 } => {
-  const [memes, setMemes] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [memes, setMemes] = useState<Meme[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!room) {
-      console.error('useMemes/unauthorized access: no valid room.')
+      console.error('useMemes: Unauthorized access - no valid room.')
       return
     }
 
-    const { startDate, endDate } = getDatesFromTab(selectedTab)
-    if (!startDate || !endDate) {
-      console.error('useMemes/invalid date range.')
-      return
-    }
-
-    const fetchMemes = async () => {
+    const fetchData = async () => {
       setLoading(true)
       setError(null)
 
       try {
-        const data = await getPopularMemes({
-          room,
-          startDate,
-          endDate,
-        })
-
-        setMemes(data.popularMemes)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
+        let data
+        if (selectedTab === 'Live') {
+          data = await getRecentMemes({ room, limit: 20 })
+        } else {
+          const { startDate, endDate } = getDatesFromTab(selectedTab)
+          if (!startDate || !endDate) {
+            console.error('useMemes: Invalid date range.')
+            return
+          }
+          data = await getPopularMemes({ room, startDate, endDate })
+        }
+        setMemes(data?.popularMemes || data?.recentMemes || [])
+      } catch (error) {
         setError(error.message)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchMemes()
+    fetchData()
 
     return () => {
-      // Cleanup code if needed
+      // Cleanup
     }
   }, [selectedTab, room])
 

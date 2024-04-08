@@ -18,12 +18,12 @@ function getTimeAgoFromISODate(createdAt: string): string {
 
   for (const { unit, duration } of intervals) {
     const interval = Math.floor(seconds / duration)
-    if (interval > 1) {
+    if (interval >= 1) {
       return `${interval} ${unit}${interval === 1 ? '' : 's'} ago`
     }
   }
 
-  return `${Math.floor(seconds)} second${seconds === 1 ? '' : 's'} ago`
+  return 'just now' // Default value if date is too recent to calculate interval
 }
 
 const MemeCard: React.FC<Meme> = (meme) => {
