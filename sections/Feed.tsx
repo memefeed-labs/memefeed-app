@@ -66,7 +66,7 @@ const Feed = () => {
         {loading && <div>Loading...</div>}
         {error && <div>Error: {error}</div>}
 
-        <div className="meme-container flex flex-col gap-8 mt-8 w-4/5 md:w-3/5 lg:w-2/5 pb-1">
+        <div className="meme-container flex flex-col gap-8 mt-8 w-5/5 md:w-4/5 lg:w-3/5 pb-1">
           {memes.map((meme, index) => (
             <MemeCard key={index} {...meme} />
           ))}
