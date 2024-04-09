@@ -56,11 +56,11 @@ const Feed = () => {
   return (
     <section className={`${styles.yPaddingsBottom} ${styles.xPaddings} relative z-10`} id="feed">
       <div className={`${styles.innerWidth} flex flex-col items-center overflow-hidden`}>
-        <div className="flex flex-col gap-2 justify-between items-center w-full">
-          <Link href="/post" className={`${styles.button} accent-button`}>
+        <div className="flex flex-col md:flex-row w-5/5 md:w-4/5 lg:w-3/5 gap-2 justify-between items-center">
+          <FeedToolbar tabs={tabs} selectedTab={selectedTab} handleTabClick={handleTabClick} />
+          <Link href="/post" className={`${styles.button} accent-button order-first md:order-last`}>
             Post
           </Link>
-          <FeedToolbar tabs={tabs} selectedTab={selectedTab} handleTabClick={handleTabClick} />
         </div>
 
         {loading && <div>Loading...</div>}
