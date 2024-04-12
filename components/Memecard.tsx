@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Meme } from 'models'
+import { useLikes } from '../clients/hooks'
 
 // Convert ISO date to human readable format, i.e. "2 days ago", "3 months ago", "4 minutes ago"
 function getTimeAgoFromISODate(createdAt: string): string {
@@ -27,10 +28,17 @@ function getTimeAgoFromISODate(createdAt: string): string {
 }
 
 const MemeCard: React.FC<Meme> = (meme) => {
-  const [liked, setLiked] = useState(false)
+  const { liked, like, unlike } = useLikes({ meme, likerAddress: 'Gaurang' })
+  const [likesCount, setLikesCount] = useState(meme.likesCount) // used to update the likes count in the UI
 
   const handleLikeClick = () => {
-    setLiked(!liked)
+    if (liked) {
+      unlike()
+      setLikesCount(Math.max(likesCount - 1, 0))
+    } else {
+      like()
+      setLikesCount(likesCount + 1)
+    }
   }
 
   const username = meme.creatorAddress
@@ -49,7 +57,9 @@ const MemeCard: React.FC<Meme> = (meme) => {
           <button onClick={handleLikeClick} className={`like-button w-6 h-6`}>
             {liked ? <img src="/icons/heart-solid.svg" alt="Loved" /> : <img src="/icons/heart-thin.svg" alt="Love" />}
           </button>
-          <div className="meme-likes text-gray-500">{meme.likesCount} loves</div>
+          <div className="meme-likes text-gray-500">
+            {likesCount} {likesCount === 1 ? 'like' : 'likes'}
+          </div>
         </div>
         <div className="meme-time text-gray-400 text-sm px-2">{timeAgo}</div>
       </div>
