@@ -8,7 +8,7 @@ const Navbar = () => {
   const { room } = useRoom() ?? ({} as { room: Room })
 
   return (
-    <div className={`${styles.xPaddings} py-8 relative z-10`}>
+    <div className={`${styles.xPaddings} py-8 relative z-0`}>
       <div className={`${styles.innerWidth} mx-auto flex justify-between items-center relative`}>
         <Link href="/" className="flex items-center gap-2 md:gap-4">
           {/* Logo */}

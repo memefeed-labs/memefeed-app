@@ -40,7 +40,7 @@
 .accent-button-disabled {
   cursor: pointer;
   display: inline-block;
-  opacity: 0.3;
+  opacity: 0.6;
   color: white;
   background: var(--primary-color);
   border-radius: 18px;
@@ -49,4 +49,8 @@
 .selected-tab {
   border-color: var(--primary-color);
   font-weight: 700;
+}
+
+.modal-background {
+  background-color: var(--background-color)
 }

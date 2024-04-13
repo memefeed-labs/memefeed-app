@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-
 import styles from '../styles'
 import { tabs } from '../utils/constants'
 import type { Meme } from 'models'
-import { MemeCard, FeedToolbar } from '../components'
+import { MemeCard, FeedToolbar, PostModal } from '../components'
 import { useMemes, useRoom } from '../clients/hooks'
 import socket from '../clients/socketIO'
 
@@ -15,6 +13,7 @@ const Feed = () => {
   const [memes, setMemes] = useState<Meme[]>([])
   const { memes: fetchedMemes, loading, error } = useMemes({ selectedTab, room })
 
+  // Update memes queue with single new meme
   const updateMemesQueue = (newMeme: Meme) => {
     setMemes((prevMemes) => {
       console.log('New meme:', newMeme)
@@ -49,18 +48,36 @@ const Feed = () => {
     }
   }, [selectedTab])
 
+  // Handle post button & modal
+  const handlePostButtonClick = () => {
+    openModal()
+  }
+
+  const [isPostModalOpen, setPostModalOpen] = useState(false)
+  const openModal = () => {
+    setPostModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setPostModalOpen(false)
+  }
+
+  // Change selected tab
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab)
   }
 
   return (
-    <section className={`${styles.yPaddingsBottom} ${styles.xPaddings} relative z-10`} id="feed">
+    <section className={`${styles.yPaddingsBottom} ${styles.xPaddings} flex-grow relative `} id="feed">
       <div className={`${styles.innerWidth} flex flex-col items-center overflow-hidden`}>
         <div className="flex flex-col md:flex-row w-5/5 md:w-4/5 lg:w-3/5 gap-2 justify-between items-center">
           <FeedToolbar tabs={tabs} selectedTab={selectedTab} handleTabClick={handleTabClick} />
-          <Link href="/post" className={`${styles.button} accent-button order-first md:order-last`}>
+          <button
+            className={`${styles.button} accent-button order-first md:order-last`}
+            onClick={handlePostButtonClick}
+          >
             Post
-          </Link>
+          </button>
         </div>
 
         {loading && <div>Loading...</div>}
@@ -71,6 +88,7 @@ const Feed = () => {
             <MemeCard key={index} {...meme} />
           ))}
         </div>
+        {isPostModalOpen && <PostModal isOpen={isPostModalOpen} onClose={closeModal} room={room} />}
       </div>
     </section>
   )

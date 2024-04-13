@@ -16,6 +16,8 @@ const useLikes = ({
   const [liked, setLiked] = useState<boolean>(false)
 
   useEffect(() => {
+    if (!meme.likers) return
+
     if (meme.likers.includes(likerAddress)) {
       setLiked(true)
     } else {

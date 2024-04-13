@@ -1,0 +1,47 @@
+import { useState } from 'react'
+import { postMeme } from '../memes'
+import type { Meme, Room } from 'models'
+
+type UsePostProps = {
+  room: Room | undefined
+  memeImage: File | null
+}
+
+type UsePostReturn = {
+  loading: boolean
+  postSuccess: boolean
+  postError: Error | null
+  isPostDisabled: boolean
+  handlePost: () => Promise<void>
+  meme: Meme | null
+}
+
+const usePost = ({ room, memeImage }: UsePostProps): UsePostReturn => {
+  const [loading, setLoading] = useState(false)
+  const [postSuccess, setPostSuccess] = useState(false)
+  const [postError, setPostError] = useState<Error | null>(null)
+  const [meme, setMeme] = useState<Meme | null>(null)
+  const isPostDisabled = !memeImage || loading
+
+  const handlePost = async () => {
+    if (!memeImage || !room) return
+
+    setLoading(true)
+    setPostError(null)
+    setPostSuccess(false)
+
+    try {
+      const data = await postMeme({ room, memeImage })
+      setMeme(data?.meme || null)
+      setPostSuccess(true)
+    } catch (error) {
+      setPostError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { loading, postSuccess, postError, isPostDisabled, handlePost, meme }
+}
+
+export default usePost

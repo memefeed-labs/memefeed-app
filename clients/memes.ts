@@ -2,6 +2,28 @@ import type { Room } from 'models'
 
 const BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3100'
 
+type PostMemeProps = {
+  room: Room
+  memeImage: File
+}
+
+const postMeme = async ({ room, memeImage }: PostMemeProps) => {
+  const formData = new FormData()
+  formData.append('roomId', room.id.toString())
+  formData.append('creatorAddress', room.creatorAddress)
+  formData.append('meme', memeImage)
+
+  const response = await fetch(`${BASE_URL}/v1/meme`, {
+    method: 'POST',
+    body: formData
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to post meme')
+  }
+  return response.json()
+}
+
 type GetPopularMemesProps = {
   room: Room
   startDate: string // ISO 8601 date string
@@ -67,4 +89,4 @@ const unlikeMeme = async ({ memeId, likerAddress }: LikeMemeProps) => {
   }
 }
 
-export { getPopularMemes, getRecentMemes, likeMeme, unlikeMeme }
+export { getPopularMemes, getRecentMemes, likeMeme, unlikeMeme, postMeme }

@@ -3,7 +3,7 @@ import { socials } from '../utils/constants'
 import styles from '../styles'
 
 const Footer = () => (
-  <footer className={`${styles.smallXPaddings} py-8 relative z-10`}>
+  <footer className={`${styles.smallXPaddings} py-8 relative z-0`}>
     <div className={`${styles.innerWidth} mx-auto flex flex-col gap-8`}>
       <div className="flex flex-col">
         <div className="md:mb-[24px] mb-[12px] h-[2px] bg-black opacity-20" />
