@@ -12,8 +12,8 @@ const Navbar = () => {
       <div className={`${styles.innerWidth} mx-auto flex justify-between items-center relative`}>
         <Link href="/" className="flex items-center gap-2 md:gap-4">
           {/* Logo */}
-          <div className="w-[48px] sm:w-[54px] md:w-[66px]">
-            <img src="/logos/logo.svg" alt="Memefeed Logo" />
+          <div className="w-[54px] sm:w-[66px] md:w-[72px]">
+            <img className="" src="/logos/baby-phoenix-logo.png" alt="Memefeed Logo" />
           </div>
 
           {/* Title */}
