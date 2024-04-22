@@ -11,7 +11,6 @@ type UsePostReturn = {
   loading: boolean
   postSuccess: boolean
   postError: Error | null
-  isPostDisabled: boolean
   handlePost: () => Promise<void>
   meme: Meme | null
 }
@@ -21,7 +20,6 @@ const usePost = ({ room, memeImage }: UsePostProps): UsePostReturn => {
   const [postSuccess, setPostSuccess] = useState(false)
   const [postError, setPostError] = useState<Error | null>(null)
   const [meme, setMeme] = useState<Meme | null>(null)
-  const isPostDisabled = !memeImage || loading
 
   const handlePost = async () => {
     if (!memeImage || !room) return
@@ -41,7 +39,7 @@ const usePost = ({ room, memeImage }: UsePostProps): UsePostReturn => {
     }
   }
 
-  return { loading, postSuccess, postError, isPostDisabled, handlePost, meme }
+  return { loading, postSuccess, postError, handlePost, meme }
 }
 
 export default usePost

@@ -15,11 +15,28 @@ interface ModalProps {
 const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
   const [shouldRender, setShouldRender] = useState(false)
   const [selectedMemeImage, setSelectedMemeImage] = useState<File | null>(null)
-  const { loading, postSuccess, postError, isPostDisabled, handlePost } = usePost({
+  const { loading, postSuccess, postError, handlePost } = usePost({
     room,
     memeImage: selectedMemeImage,
   })
+  const isImageUploaded = !selectedMemeImage
 
+  console.debug(
+    'Rendered PostModal with isOpen:',
+    isOpen,
+    'room:',
+    room,
+    'loading:',
+    loading,
+    'postSuccess:',
+    postSuccess,
+    'postError:',
+    postError,
+    'selectedMemeImage:',
+    selectedMemeImage
+  )
+
+  // Show/hide modal
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true)
@@ -28,10 +45,20 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
     }
   }, [isOpen])
 
+  // Close modal after successful post
+  useEffect(() => {
+    if (postSuccess) {
+      const timeoutId = setTimeout(() => onClose(), 3000)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [postSuccess, onClose])
+
+  // Close modal when clicking outside
   const handleClickOutside = () => {
     onClose()
   }
 
+  // Handle file input for images
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
 
@@ -40,12 +67,13 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
     }
   }
 
-  // Handle drag and drop for images
+  // Handle drag for images
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
+  // Handle drop for images
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -79,7 +107,7 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
           <div className="flex flex-col items-center justify-center p-2 rounded-md gap-2">
             <div
               className={`flex items-center justify-center p-1 w-full my-1 cursor-pointer
-                ${isPostDisabled ? 'border-4 border-dashed border-gray-300' : ''}`}
+                ${isImageUploaded ? 'border-4 border-dashed border-gray-300' : ''}`}
             >
               <button className="flex items-center justify-center p-2">
                 <input type="file" id="meme-image" name="meme-image" className="hidden" onChange={handleFileChange} />
@@ -102,7 +130,7 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
                       for meme template inspiration
                     </div>
                     <div className="text-gray-500 text-sm">Supports JPG, JPEG, PNG, GIF, WEBP</div>
-                    <div className="text-gray-500 text-sm">Max Size: 2MB</div>
+                    <div className="text-gray-500 text-sm">Max Size: 10MB</div>
                   </label>
                 )}
               </button>
@@ -112,7 +140,7 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
                   <img
                     src={URL.createObjectURL(selectedMemeImage)}
                     alt="Selected Image"
-                    className="h-[420px] object-cover"
+                    className="h-[420px] object-contain"
                   />
                 </label>
               )}
@@ -120,32 +148,28 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
           </div>
 
           <div className="flex flex-col items-center justify-center p-2">
-            <button
-              className={`${styles.button} w-full ${isPostDisabled ? 'accent-button-disabled' : 'accent-button'}`}
-              disabled={isPostDisabled}
-              onClick={handlePost}
-            >
-              <div className="flex items-center justify-center p-1">
-                {/* Loading spinner first, then success icon, then error icon, then default post text */}
-                {loading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-4 border-white-900"></div>
-                    <div>Posting...</div>
-                  </div>
-                ) : postSuccess ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <img src="/memes/success_kid.jpg" alt="Success" className="w-16 h-12 rounded-lg" />
-                    <div>Posted Successfully!</div>
-                  </div>
-                ) : postError ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div>Error Posting! Try again later...</div>
-                  </div>
-                ) : (
-                  <span>Send it!</span>
-                )}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-[#1b6fdd]"></div>
+                <div className={`text-[18px] md:text-[20px] font-medium`}>Posting...</div>
               </div>
-            </button>
+            ) : postSuccess ? (
+              <div className={`text-[18px] md:text-[20px] font-bold text-green-500`}>
+                Posted Successfully! Returning to Feed...
+              </div>
+            ) : postError ? (
+              <div className={`text-[18px] md:text-[20px] font-medium text-red-500`}>
+                Error Posting! Try again later...
+              </div>
+            ) : (
+              <button
+                className={`${styles.button} w-full ${isImageUploaded ? 'accent-button-disabled' : 'accent-button'}`}
+                disabled={isImageUploaded}
+                onClick={handlePost}
+              >
+                Post it!
+              </button>
+            )}
           </div>
         </div>
       </div>

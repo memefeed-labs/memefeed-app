@@ -10,8 +10,9 @@ type PostMemeProps = {
 const postMeme = async ({ room, memeImage }: PostMemeProps) => {
   const formData = new FormData()
   formData.append('roomId', room.id.toString())
-  formData.append('creatorAddress', room.creatorAddress)
-  formData.append('meme', memeImage)
+  // TODO: userAddress logic needs to be implemented, using a placeholder for now
+  formData.append('creatorAddress', 'Gaurang')
+  formData.append('memeImage', memeImage)
 
   const response = await fetch(`${BASE_URL}/v1/meme`, {
     method: 'POST',
@@ -34,7 +35,7 @@ type GetPopularMemesProps = {
 const getPopularMemes = async ({ room, startDate, endDate, limit = 20 }: GetPopularMemesProps) => {
   // TODO: userAddress logic needs to be implemented, using a placeholder for now
   const response = await fetch(
-    `${BASE_URL}/v1/memes/popular?roomId=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}&userAddress=${room.creatorAddress}`
+    `${BASE_URL}/v1/memes/popular?roomId=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}&userAddress=Gaurang`
   )
   if (!response.ok) {
     throw new Error('Failed to get popular memes')
@@ -49,7 +50,7 @@ type GetRecentMemesProps = {
 
 const getRecentMemes = async ({ room, limit = 20 }: GetRecentMemesProps) => {
   // TODO: userAddress logic needs to be implemented, using a placeholder for now
-  const response = await fetch(`${BASE_URL}/v1/memes/recent?roomId=${room.id}&limit=${limit}&userAddress=${room.creatorAddress}`)
+  const response = await fetch(`${BASE_URL}/v1/memes/recent?roomId=${room.id}&limit=${limit}&userAddress=Gaurang`)
   if (!response.ok) {
     throw new Error('Failed to get recent memes')
   }

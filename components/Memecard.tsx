@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Meme } from 'models'
 import { useLikes } from '../clients/hooks'
 
@@ -28,17 +27,10 @@ function getTimeAgoFromISODate(createdAt: string): string {
 }
 
 const MemeCard: React.FC<Meme> = (meme) => {
-  const { liked, like, unlike } = useLikes({ meme, likerAddress: 'Gaurang' })
-  const [likesCount, setLikesCount] = useState(meme.likesCount) // used to update the likes count in the UI
+  const { liked, likesCount, like, unlike } = useLikes({ meme, likerAddress: 'Gaurang' })
 
   const handleLikeClick = () => {
-    if (liked) {
-      unlike()
-      setLikesCount(Math.max(likesCount - 1, 0))
-    } else {
-      like()
-      setLikesCount(likesCount + 1)
-    }
+    liked ? unlike() : like()
   }
 
   const username = meme.creatorAddress

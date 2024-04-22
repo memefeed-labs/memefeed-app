@@ -13,10 +13,21 @@ const Feed = () => {
   const [memes, setMemes] = useState<Meme[]>([])
   const { memes: fetchedMemes, loading, error } = useMemes({ selectedTab, room })
 
+  console.debug(
+    'Rendered Feed: selectedTab: ',
+    selectedTab,
+    'room:',
+    room,
+    'memes:',
+    memes,
+    'fetchedMemes:',
+    fetchedMemes
+  )
+
   // Update memes queue with single new meme
   const updateMemesQueue = (newMeme: Meme) => {
     setMemes((prevMemes) => {
-      console.log('New meme:', newMeme)
+      console.debug('New meme:', newMeme)
       // TODO: Implement a max limit for memes (this conflicts with fetching memes that are larger)
       const maxMemes = 100
       if (prevMemes.length >= maxMemes) {
@@ -29,19 +40,17 @@ const Feed = () => {
 
   // Update memes when new memes are fetched
   useEffect(() => {
-    if (fetchedMemes) {
-      setMemes(fetchedMemes)
-    }
+    setMemes(fetchedMemes)
   }, [fetchedMemes])
 
   // Listen for new memes in real-time (live only)
   useEffect(() => {
-    if (selectedTab !== 'Live') return
-
-    console.log('Listening for new memes...')
-    socket.on('new_meme', (meme) => {
-      updateMemesQueue(meme)
-    })
+    if (selectedTab === 'Live') {
+      console.log('Listening for new memes...')
+      socket.on('new_meme', (meme) => {
+        updateMemesQueue(meme)
+      })
+    }
 
     return () => {
       socket.off('new_meme')
