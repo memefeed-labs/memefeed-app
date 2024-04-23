@@ -48,7 +48,7 @@ const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
   // Close modal after successful post
   useEffect(() => {
     if (postSuccess) {
-      const timeoutId = setTimeout(() => onClose(), 3000)
+      const timeoutId = setTimeout(() => onClose(), 1000)
       return () => clearTimeout(timeoutId)
     }
   }, [postSuccess, onClose])
