@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { postMeme } from '../memes'
+import { postMeme } from '../clients/memes'
 import type { Meme, Room } from 'models'
 
 type UsePostProps = {
@@ -32,7 +32,8 @@ const usePost = ({ room, memeImage }: UsePostProps): UsePostReturn => {
       const data = await postMeme({ room, memeImage })
       setMeme(data?.meme || null)
       setPostSuccess(true)
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       setPostError(error)
     } finally {
       setLoading(false)

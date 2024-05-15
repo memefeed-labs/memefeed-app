@@ -3,7 +3,8 @@ import styles from '../styles'
 import { tabs } from '../utils/constants'
 import type { Meme } from 'models'
 import { MemeCard, FeedToolbar, PostModal } from '../components'
-import { useMemes, useRoom } from '../clients/hooks'
+import { useMemes } from '../hooks'
+import { useRoom } from '../contexts'
 import socket from '../clients/socketIO'
 
 // Section used in feed page

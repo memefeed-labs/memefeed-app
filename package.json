@@ -12,10 +12,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.36.0",
     "@types/node": "18.11.10",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "@vercel/analytics": "^1.0.2",
+    "@web3modal/wagmi": "^4.1.11",
     "eslint": "8.28.0",
     "eslint-config-next": "^13.4.19",
     "next": "13.0.5",
@@ -23,7 +25,9 @@
     "react-dom": "18.2.0",
     "react-tooltip": "^5.21.3",
     "socket.io-client": "^4.7.5",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "viem": "^2.10.5",
+    "wagmi": "^2.8.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.5.0",

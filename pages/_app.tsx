@@ -28,13 +28,13 @@ const App = ({ Component, pageProps }: AppProps) => (
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://www.memefeed.xyz/" />
       <meta property="og:image" content="/og-preview.png" />
-      <meta property="og:description" content="Memefeed - live memes for your community" />
-      <meta property="description" content="Memefeed - live memes for your community" />
+      <meta property="og:description" content="Memefeed - live memes for every community" />
+      <meta property="description" content="Memefeed - live memes for every community" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" content="Memefeed" />
-      <meta name="twitter:description" content="Memefeed - live memes for your community" />
+      <meta name="twitter:description" content="Memefeed - live memes for every community" />
       <meta name="twitter:image" content="/og-preview.png" />
     </Head>
     <Component {...pageProps} />

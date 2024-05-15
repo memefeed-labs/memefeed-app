@@ -1,8 +1,8 @@
-import { Footer, Navbar } from '../components'
-import { RoomProvider } from '../clients/hooks'
+import { Footer, Navbar, Web3ModalProvider } from '../components'
+import { RoomProvider, AuthWrapper } from '../contexts'
 import { Feed } from '../sections'
 
-const Index = () => (
+const MainPage = () => (
   <div className="min-h-screen bg-primary-white overflow-hidden relative">
     <div className="max-w-6xl mx-auto">
       <RoomProvider>
@@ -14,4 +14,12 @@ const Index = () => (
   </div>
 )
 
-export default Index
+const Index = AuthWrapper(MainPage)
+
+const Web3Index = () => (
+  <Web3ModalProvider>
+    <Index />
+  </Web3ModalProvider>
+)
+
+export default Web3Index

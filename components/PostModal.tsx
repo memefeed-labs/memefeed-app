@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import styles from '../styles'
 
-import { usePost } from '../clients/hooks'
+import { usePost } from '../hooks'
 import type { Room } from 'models'
 
 interface ModalProps {

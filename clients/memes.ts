@@ -11,7 +11,7 @@ const postMeme = async ({ room, memeImage }: PostMemeProps) => {
   const formData = new FormData()
   formData.append('roomId', room.id.toString())
   // TODO: userAddress logic needs to be implemented, using a placeholder for now
-  formData.append('creatorAddress', 'Gaurang')
+  formData.append('creatorId', '8')
   formData.append('memeImage', memeImage)
 
   const response = await fetch(`${BASE_URL}/v1/meme`, {
@@ -35,7 +35,7 @@ type GetPopularMemesProps = {
 const getPopularMemes = async ({ room, startDate, endDate, limit = 20 }: GetPopularMemesProps) => {
   // TODO: userAddress logic needs to be implemented, using a placeholder for now
   const response = await fetch(
-    `${BASE_URL}/v1/memes/popular?roomId=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}&userAddress=Gaurang`
+    `${BASE_URL}/v1/memes/popular?roomId=${room.id}&startDate=${startDate}&endDate=${endDate}&limit=${limit}&userId=8`
   )
   if (!response.ok) {
     throw new Error('Failed to get popular memes')
@@ -50,7 +50,7 @@ type GetRecentMemesProps = {
 
 const getRecentMemes = async ({ room, limit = 20 }: GetRecentMemesProps) => {
   // TODO: userAddress logic needs to be implemented, using a placeholder for now
-  const response = await fetch(`${BASE_URL}/v1/memes/recent?roomId=${room.id}&limit=${limit}&userAddress=Gaurang`)
+  const response = await fetch(`${BASE_URL}/v1/memes/recent?roomId=${room.id}&limit=${limit}&userId=8`)
   if (!response.ok) {
     throw new Error('Failed to get recent memes')
   }
@@ -59,16 +59,16 @@ const getRecentMemes = async ({ room, limit = 20 }: GetRecentMemesProps) => {
 
 type LikeMemeProps = {
   memeId: number,
-  likerAddress: string
+  likerId: number
 }
 
-const likeMeme = async ({ memeId, likerAddress }: LikeMemeProps) => {
+const likeMeme = async ({ memeId, likerId }: LikeMemeProps) => {
   const response = await fetch(`${BASE_URL}/v1/meme/like`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ memeId, likerAddress })
+    body: JSON.stringify({ memeId, likerId })
   })
 
   if (!response.ok) {
@@ -76,13 +76,13 @@ const likeMeme = async ({ memeId, likerAddress }: LikeMemeProps) => {
   }
 }
 
-const unlikeMeme = async ({ memeId, likerAddress }: LikeMemeProps) => {
+const unlikeMeme = async ({ memeId, likerId }: LikeMemeProps) => {
   const response = await fetch(`${BASE_URL}/v1/meme/like`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ memeId, likerAddress })
+    body: JSON.stringify({ memeId, likerId })
   })
 
   if (!response.ok) {

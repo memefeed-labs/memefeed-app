@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getPopularMemes, getRecentMemes } from '../memes'
+import { getPopularMemes, getRecentMemes } from '../clients/memes'
 import type { Meme, Room } from 'models'
 
 const getDatesFromTab = (tab: string) => {
@@ -45,7 +45,7 @@ const useMemes = ({
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!room) {
+    if (!room || Object.keys(room).length === 0) {
       console.error('useMemes: Unauthorized access - no valid room.')
       return
     }
@@ -67,7 +67,8 @@ const useMemes = ({
           data = await getPopularMemes({ room, startDate, endDate })
         }
         setMemes(data?.popularMemes || data?.recentMemes || [])
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         setError(error.message)
       } finally {
         setLoading(false)

@@ -4,7 +4,7 @@
 
 ```bash
 # Run the app
-npm run dev
+npm run build && npm run dev
 ```
 
 ## Open Items
@@ -12,4 +12,4 @@ npm run dev
 1. Perf Optimizations
    1. Pagination and lazy loading
    2. Debounce for fetching memes
-2. [Design] Confirm favicons & logo
+2. Verify WalletConnect

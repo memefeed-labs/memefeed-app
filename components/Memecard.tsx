@@ -1,5 +1,5 @@
 import { Meme } from 'models'
-import { useLikes } from '../clients/hooks'
+import { useLikes } from '../hooks'
 
 // Convert ISO date to human readable format, i.e. "2 days ago", "3 months ago", "4 minutes ago"
 function getTimeAgoFromISODate(createdAt: string): string {
@@ -27,13 +27,14 @@ function getTimeAgoFromISODate(createdAt: string): string {
 }
 
 const MemeCard: React.FC<Meme> = (meme) => {
-  const { liked, likesCount, like, unlike } = useLikes({ meme, likerAddress: 'Gaurang' })
+  // TODO: Update LIKER ID
+  const { liked, likesCount, like, unlike } = useLikes({ meme, likerId: 8 })
 
   const handleLikeClick = () => {
     liked ? unlike() : like()
   }
 
-  const username = meme.creatorAddress
+  const username = meme.creator?.username || 'anon'
   const timeAgo = getTimeAgoFromISODate(meme.createdAt)
 
   return (

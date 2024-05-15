@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from '../styles'
 
-import { useRoom } from 'clients/hooks'
+import { useRoom } from '../contexts'
 import type { Room } from 'models'
 
 const Navbar = () => {

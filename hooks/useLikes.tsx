@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
-import { likeMeme, unlikeMeme } from '../memes'
+import { likeMeme, unlikeMeme } from '../clients/memes'
 import type { Meme } from 'models'
 
 const useLikes = ({
   meme,
-  likerAddress,
+  likerId,
 }: {
   meme: Meme
-  likerAddress: string
+  likerId: number
 }): {
   liked: boolean
   like: () => void
@@ -17,17 +17,21 @@ const useLikes = ({
   const [liked, setLiked] = useState<boolean>(false)
   const [likesCount, setLikesCount] = useState(meme.likesCount) // Initial likesCount
 
-  // Update liked based on initial likers
   useEffect(() => {
     if (!meme.likers) return
 
-    setLiked(meme.likers.includes(likerAddress))
+    // Check if the likerId is in the likers array
+    console.log('useLikes: meme.likers', meme.likers)
+    console.log('useLikes: likerId', likerId)
+    const hasLiked = meme.likers.some((liker) => liker.id === likerId)
+    console.log('useLikes: hasLiked', hasLiked)
+    setLiked(hasLiked)
     setLikesCount(meme.likesCount)
-  }, [meme.likers, likerAddress, meme.likesCount])
+  }, [meme.likers, likerId, meme.likesCount])
 
   const like = async () => {
     try {
-      await likeMeme({ memeId: meme.id, likerAddress })
+      await likeMeme({ memeId: meme.id, likerId })
       setLiked(true)
       setLikesCount(likesCount + 1) // Optimistic update for likesCount
     } catch (error) {
@@ -37,7 +41,7 @@ const useLikes = ({
 
   const unlike = async () => {
     try {
-      await unlikeMeme({ memeId: meme.id, likerAddress })
+      await unlikeMeme({ memeId: meme.id, likerId })
       setLiked(false)
       setLikesCount(likesCount - 1) // Optimistic update for likesCount
     } catch (error) {

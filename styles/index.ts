@@ -11,6 +11,7 @@ const styles = {
 
   // components
   button: 'cursor-pointer text-[20px] md:text-[22px] font-medium px-4 md:px-6 py-1 md:py-2',
+  smallButton: 'cursor-pointer text-[16px] md:text-[18px] font-medium px-4 md:px-6 py-1 md:py-2',
   tab: 'cursor-pointer px-2 py-1 md:py-2 rounded-xl border-4 text-[16px]',
 
   // nav bar

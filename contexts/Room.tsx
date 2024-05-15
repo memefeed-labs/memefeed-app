@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 import type { Room } from 'models'
-import { getRoom } from '../rooms'
+import { getRoom } from '../clients/rooms'
 
 type RoomContextValue = {
   room: Room
