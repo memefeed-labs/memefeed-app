@@ -3,6 +3,9 @@ import type { AppProps } from 'next/app'
 import '../styles/globals.css'
 import { Analytics } from '@vercel/analytics/react'
 
+import { Web3ModalProvider } from '../components'
+import { RoomProvider, AuthProvider } from '../contexts'
+
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -26,7 +29,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       <meta property="og:title" content="Memefeed" />
       <meta property="og:site_name" content="Memefeed" />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://www.memefeed.xyz/" />
+      <meta property="og:url" content="https://www.memefeed.fun/" />
       <meta property="og:image" content="/og-preview.png" />
       <meta property="og:description" content="Memefeed - live memes for every community" />
       <meta property="description" content="Memefeed - live memes for every community" />
@@ -37,7 +40,15 @@ const App = ({ Component, pageProps }: AppProps) => (
       <meta name="twitter:description" content="Memefeed - live memes for every community" />
       <meta name="twitter:image" content="/og-preview.png" />
     </Head>
-    <Component {...pageProps} />
+
+    <Web3ModalProvider>
+      <AuthProvider>
+        <RoomProvider>
+          <Component {...pageProps} />
+        </RoomProvider>
+      </AuthProvider>
+    </Web3ModalProvider>
+
     <Analytics />
   </>
 )

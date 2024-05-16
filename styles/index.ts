@@ -22,7 +22,7 @@ const styles = {
   titleTextSubheading: 'font-normal md:text-[24px] text-[16px] text-center text-black',
   secondaryHeading: 'font-bold md:text-[40px] text-[24px] text-center text-black',
   secondarySubheading: 'font-bold md:text-[24px] text-[18px] text-left text-black',
-  secondaryText: 'font-normal md:text-[18px] text-[14px] text-left text-black',
+  secondaryText: 'font-normal md:text-[20px] text-[14px] text-left text-black',
 }
 
 export default styles;

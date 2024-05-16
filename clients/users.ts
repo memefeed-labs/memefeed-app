@@ -12,11 +12,10 @@ const getUser = async (address: string) => {
 type SignMessageAsync = (args: { message: string }) => Promise<string>;
 const createUser = async (address: string, username: string, signMessageAsync: SignMessageAsync) => {
     try {
-        // Generate an Ethereum signature
+        // Generate a signature
         const message = `Create account with username: ${username}`;
         const signature = await signMessageAsync({ message });
 
-        // Send a PUT request to the backend API to create the account
         const response = await fetch(`${BASE_URL}/v1/user`, {
             method: 'PUT',
             headers: {

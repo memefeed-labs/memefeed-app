@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { postMeme } from '../clients/memes'
-import type { Meme, Room } from 'models'
+import type { Meme } from 'models'
+import { useRoom } from '../contexts'
 
 type UsePostProps = {
-  room: Room | undefined
   memeImage: File | null
 }
 
@@ -15,26 +15,27 @@ type UsePostReturn = {
   meme: Meme | null
 }
 
-const usePost = ({ room, memeImage }: UsePostProps): UsePostReturn => {
+const usePost = ({ memeImage }: UsePostProps): UsePostReturn => {
   const [loading, setLoading] = useState(false)
   const [postSuccess, setPostSuccess] = useState(false)
   const [postError, setPostError] = useState<Error | null>(null)
   const [meme, setMeme] = useState<Meme | null>(null)
+  const { room, user } = useRoom()
 
   const handlePost = async () => {
-    if (!memeImage || !room) return
+    if (!memeImage || !room || !user) return
 
     setLoading(true)
     setPostError(null)
     setPostSuccess(false)
 
     try {
-      const data = await postMeme({ room, memeImage })
-      setMeme(data?.meme || null)
+      const data = await postMeme({ user, room, memeImage })
+      const newMeme = { ...data.meme, creator: { id: user.id, username: user.username, address: user.address } }
+      setMeme(newMeme)
       setPostSuccess(true)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setPostError(error)
+    } catch (error) {
+      setPostError(error as Error)
     } finally {
       setLoading(false)
     }

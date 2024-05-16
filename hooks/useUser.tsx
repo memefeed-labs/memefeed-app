@@ -18,9 +18,9 @@ const useUser = (address: `0x${string}` | undefined) => {
       setLoading(true)
       setError(null)
       try {
-        const fetchedUserResult = await getUser(address)
-        if (fetchedUserResult) {
-          setUser(fetchedUserResult.user)
+        const fetchedUserResponse = await getUser(address)
+        if (fetchedUserResponse) {
+          setUser(fetchedUserResponse.user)
         } else {
           setUser(null) // No user found
         }

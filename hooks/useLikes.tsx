@@ -2,36 +2,41 @@ import { useState, useEffect } from 'react'
 import { likeMeme, unlikeMeme } from '../clients/memes'
 import type { Meme } from 'models'
 
-const useLikes = ({
-  meme,
-  likerId,
-}: {
+import { useRoom } from '../contexts'
+
+type UseLikesProps = {
   meme: Meme
-  likerId: number
-}): {
+}
+
+type UseLikesReturn = {
   liked: boolean
   like: () => void
   unlike: () => void
   likesCount: number
-} => {
+}
+
+const useLikes = ({ meme }: UseLikesProps): UseLikesReturn => {
   const [liked, setLiked] = useState<boolean>(false)
   const [likesCount, setLikesCount] = useState(meme.likesCount) // Initial likesCount
+  const { user } = useRoom()
 
   useEffect(() => {
-    if (!meme.likers) return
+    if (!meme.likers || !user) return
 
     // Check if the likerId is in the likers array
-    console.log('useLikes: meme.likers', meme.likers)
-    console.log('useLikes: likerId', likerId)
-    const hasLiked = meme.likers.some((liker) => liker.id === likerId)
-    console.log('useLikes: hasLiked', hasLiked)
+    const hasLiked = meme.likers.some((liker) => liker.id === Number(user.id))
     setLiked(hasLiked)
     setLikesCount(meme.likesCount)
-  }, [meme.likers, likerId, meme.likesCount])
+  }, [meme.likers, user, meme.likesCount])
 
   const like = async () => {
+    if (!user) {
+      console.error('like: User is not authenticated.')
+      return
+    }
+
     try {
-      await likeMeme({ memeId: meme.id, likerId })
+      await likeMeme({ memeId: meme.id, likerId: user.id })
       setLiked(true)
       setLikesCount(likesCount + 1) // Optimistic update for likesCount
     } catch (error) {
@@ -40,8 +45,13 @@ const useLikes = ({
   }
 
   const unlike = async () => {
+    if (!user) {
+      console.error('unlike: User is not authenticated.')
+      return
+    }
+
     try {
-      await unlikeMeme({ memeId: meme.id, likerId })
+      await unlikeMeme({ memeId: meme.id, likerId: user.id })
       setLiked(false)
       setLikesCount(likesCount - 1) // Optimistic update for likesCount
     } catch (error) {

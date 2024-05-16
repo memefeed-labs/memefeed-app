@@ -27,8 +27,7 @@ function getTimeAgoFromISODate(createdAt: string): string {
 }
 
 const MemeCard: React.FC<Meme> = (meme) => {
-  // TODO: Update LIKER ID
-  const { liked, likesCount, like, unlike } = useLikes({ meme, likerId: 8 })
+  const { liked, likesCount, like, unlike } = useLikes({ meme })
 
   const handleLikeClick = () => {
     liked ? unlike() : like()

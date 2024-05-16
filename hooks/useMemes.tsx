@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { getPopularMemes, getRecentMemes } from '../clients/memes'
-import type { Meme, Room } from 'models'
+import type { Meme } from 'models'
+
+import { useRoom } from '../contexts'
 
 const getDatesFromTab = (tab: string) => {
   const now = new Date()
@@ -29,24 +31,31 @@ const getDatesFromTab = (tab: string) => {
   }
 }
 
-const useMemes = ({
-  selectedTab,
-  room,
-}: {
+type UseMemesProps = {
   selectedTab: string
-  room: Room | undefined
-}): {
+}
+
+type UseMemesReturn = {
   memes: Meme[]
   loading: boolean
   error: string | null
-} => {
+}
+
+const useMemes = ({ selectedTab }: UseMemesProps): UseMemesReturn => {
   const [memes, setMemes] = useState<Meme[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
+  const { room, user } = useRoom()
+
   useEffect(() => {
     if (!room || Object.keys(room).length === 0) {
       console.error('useMemes: Unauthorized access - no valid room.')
+      return
+    }
+
+    if (!user || Object.keys(user).length === 0) {
+      console.error('useMemes: Unauthorized access - no valid user.')
       return
     }
 
@@ -57,14 +66,14 @@ const useMemes = ({
       try {
         let data
         if (selectedTab === 'Live') {
-          data = await getRecentMemes({ room, limit: 20 })
+          data = await getRecentMemes({ user, room, limit: 20 })
         } else {
           const { startDate, endDate } = getDatesFromTab(selectedTab)
           if (!startDate || !endDate) {
             console.error('useMemes: Invalid date range.')
             return
           }
-          data = await getPopularMemes({ room, startDate, endDate })
+          data = await getPopularMemes({ user, room, startDate, endDate })
         }
         setMemes(data?.popularMemes || data?.recentMemes || [])
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +89,7 @@ const useMemes = ({
     return () => {
       // Cleanup
     }
-  }, [selectedTab, room])
+  }, [selectedTab, room, user])
 
   return { memes, loading, error }
 }

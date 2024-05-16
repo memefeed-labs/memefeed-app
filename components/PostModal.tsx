@@ -4,37 +4,20 @@ import Link from 'next/link'
 import styles from '../styles'
 
 import { usePost } from '../hooks'
-import type { Room } from 'models'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  room: Room | undefined
 }
 
-const PostModal = ({ isOpen, onClose, room }: ModalProps) => {
+const PostModal = ({ isOpen, onClose }: ModalProps) => {
   const [shouldRender, setShouldRender] = useState(false)
   const [selectedMemeImage, setSelectedMemeImage] = useState<File | null>(null)
-  const { loading, postSuccess, postError, handlePost } = usePost({
-    room,
-    memeImage: selectedMemeImage,
-  })
+  const { loading, postSuccess, postError, handlePost } = usePost({ memeImage: selectedMemeImage })
   const isImageUploaded = !selectedMemeImage
 
-  console.debug(
-    'Rendered PostModal with isOpen:',
-    isOpen,
-    'room:',
-    room,
-    'loading:',
-    loading,
-    'postSuccess:',
-    postSuccess,
-    'postError:',
-    postError,
-    'selectedMemeImage:',
-    selectedMemeImage
-  )
+  console.debug('PostModal isOpen:', isOpen, 'loading:', loading, 'success:', postSuccess, 'error:', postError)
+  console.debug('memeImage:', selectedMemeImage)
 
   // Show/hide modal
   useEffect(() => {

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import styles from '../styles'
-import { User } from 'models'
-import { useUser } from 'hooks'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount, useEnsName, useSignMessage } from 'wagmi'
+import { useRouter } from 'next/router'
+
+import styles from '../styles'
+import { useAuth, useRoom } from 'contexts'
+import { useUser } from 'hooks'
 import { createUser } from 'clients/users'
+import { getRoom, loginRoom } from 'clients/rooms'
+import { User } from 'models'
 
 const LoginModal = () => {
   const { open } = useWeb3Modal()
@@ -12,12 +16,28 @@ const LoginModal = () => {
   const { data: ensName } = useEnsName({ address: address })
   const { user: fetchedUser, loading: fetchingUserLoading, error: fetchingUserError } = useUser(address)
   const [user, setUser] = useState<User | null>(null)
+  const [userCreationError, setUserCreationError] = useState<string | null>(null)
+  const [roomJoiningError, setRoomJoiningError] = useState<string | null>(null)
   const [roomName, setRoomName] = useState('')
   const [roomPassword, setRoomPassword] = useState('')
   const [usernameInput, setUsernameInput] = useState('')
   const [displayUsername, setDisplayUsername] = useState('')
-  const [userCreationError, setUserCreationError] = useState<string | null>(null)
   const { signMessageAsync } = useSignMessage()
+  const router = useRouter()
+  const { login } = useAuth()
+  const { setRoom: setRoomContext, setUser: setUserContext } = useRoom()
+
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    // Check for a valid session token and corresponding wallet address
+    const sessionToken = localStorage.getItem('session_token')
+    const storedAddress = localStorage.getItem('session_wallet_address')
+
+    if (sessionToken && storedAddress === address) {
+      login()
+      router.push('/')
+    }
+  }, [login, router, address])
 
   const openWeb3Modal = () => {
     open()
@@ -60,8 +80,8 @@ const LoginModal = () => {
     if (!usernameInput || !address) return
 
     try {
-      const newUserResult = await createUser(address, usernameInput, signMessageAsync)
-      setUser(newUserResult.user)
+      const newUserResponse = await createUser(address, usernameInput, signMessageAsync)
+      setUser(newUserResponse.user)
       setUserCreationError(null) // Clear any previous errors
     } catch (error) {
       console.error('Error creating account:', error)
@@ -69,11 +89,32 @@ const LoginModal = () => {
     }
   }
 
-  const joinRoom = (event: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     // Prevent form submission & reload
-    event.preventDefault()
+    e.preventDefault()
 
-    console.log('Joining room:', roomName, roomPassword)
+    try {
+      const roomResponse = await getRoom(undefined, roomName)
+      const roomId = roomResponse.room.id
+
+      const loginResponse = await loginRoom(roomId, roomPassword, address, signMessageAsync)
+      console.debug('Logged in:', loginResponse)
+
+      localStorage.setItem('session_token', loginResponse.sessionToken)
+      localStorage.setItem('session_wallet_address', address as string)
+
+      // Set context for logged in room / user
+      setRoomContext(roomResponse.room)
+      setUserContext(user as User)
+
+      login()
+      setRoomJoiningError(null) // Clear any previous errors
+
+      router.push(`/`)
+    } catch (error) {
+      console.error('Error logging into room:', error)
+      setRoomJoiningError('Error logging into room. Try again.')
+    }
   }
 
   // Ensure consistent initial rendering (server / client next.js)
@@ -131,7 +172,7 @@ const LoginModal = () => {
                     </button>
                   </div>
                   <div className="flex justify-center mb-4">{displayUsername}</div>
-                  <form onSubmit={joinRoom}>
+                  <form onSubmit={handleLogin}>
                     <input
                       type="text"
                       placeholder="Room Name"
@@ -146,6 +187,9 @@ const LoginModal = () => {
                       onChange={(e) => setRoomPassword(e.target.value)}
                       className="w-full p-2 mb-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm"
                     />
+                    {roomJoiningError && (
+                      <div className="text-sm text-red-500 text-center mb-4">{roomJoiningError}</div>
+                    )}
                     <div className="flex justify-center">
                       <button type="submit" className={`${styles.button} accent-button`}>
                         Join
