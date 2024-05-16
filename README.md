@@ -15,6 +15,7 @@ npm run build && npm run dev
    1. show specific error for when username is taken
    2. show specific error when room does not exist, wrong password for room
 4. Logout
-5. Perf Optimizations
+5. feat(view) live / popular tabs clarity in feed UI
+6. Perf Optimizations
    1. Pagination and lazy loading
    2. Debounce for fetching memes
