@@ -4,6 +4,7 @@ This repo is for the Memefeed frontend.
 
 [Dorahacks Buidl](<https://dorahacks.io/buidl/12713>)
 [Demo Video](<https://www.youtube.com/watch?v=xcMi5EfuPAo>)
+[Follow on Twitter](<https://www.x.com/memefeedorg>)
 
 See the [backend / sequencer tech documentation](https://github.com/memefeed-labs/memefeed) for more details.
 
